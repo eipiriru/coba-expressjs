@@ -28,6 +28,7 @@ router.post('/admin/createuser', verifyToken, validateUser, userController.creat
 router.get('/admin/getuserbyid/:id', verifyToken, userController.getUserbyId);
 router.put('/admin/updatealldatauser/:id', verifyToken, cekID, validateUpdateAllData, userController.updatedataUser);
 router.patch('/admin/updatepartialdatauser/:id', verifyToken, cekID, validateUpdatePartialData, userController.updatedataUser);
+router.delete('/admin/deleteuserbyid/:id', verifyToken, cekID, userController.deleteUserbyId);
 
 //export router
 module.exports = router

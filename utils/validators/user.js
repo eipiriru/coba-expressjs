@@ -95,6 +95,7 @@ const cekID = async (req, res, next) => {
     let id = Number(req.params.id);
     const user = await prisma.user.findFirst({ where: {id: id} })
     if (!user) return res.status(401).json({ success: false, message: 'User Not Found.' });
+    next();
 }
 
 module.exports = { validateUser, validateUpdateAllData, validateUpdatePartialData, cekID }
