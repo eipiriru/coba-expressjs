@@ -7,26 +7,28 @@ const prisma = require('../../prisma/client');
 // Definisikan validasi untuk create user
 const validateUser = [
     body('name').notEmpty().withMessage('Name is required'),
-    body('username').notEmpty().withMessage('Username is required')
-        .custom(async (value, { req }) => {
-            if (!value) {
+    body('username').notEmpty().withMessage('Username is required.')
+        .custom(async (value) => {
+            if (!value){
                 throw new Error('Username is required');
             }
-            const user = await prisma.user.findUnique({ where: { username: value } });
-            if (user && user.id !== Number(req.params.id)) {
-                throw new Error('Username already exists');
+            // const user = await prisma.user.findUnique({ where: { username: value } });
+            const user = await prisma.user.findFirst({ where: { OR: [{username: value},{email: value}] } })
+            if (user) {
+                throw new Error('Username already exist');
             }
             return true;
         }),
     body('email')
         .notEmpty().withMessage('Email is required')
         .isEmail().withMessage('Email is invalid')
-        .custom(async (value, { req }) => {
+        .custom(async (value) => {
             if (!value) {
                 throw new Error('Email is required');
             }
-            const user = await prisma.user.findUnique({ where: { email: value } });
-            if (user && user.id !== Number(req.params.id)) {
+            // const user = await prisma.user.findUnique({ where: { email: value } });
+            const user = await prisma.user.findFirst({ where: { OR: [{username: value},{email: value}] } })
+            if (user) {
                 throw new Error('Email already exists');
             }
             return true;
