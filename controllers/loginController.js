@@ -11,7 +11,6 @@ const login = async (req, res) => {
     if (!errors.isEmpty()){
         return res.status(422).json({
             success: false,
-            message: "Validation error",
             errors: errors.array(),
         });
     }
@@ -35,9 +34,9 @@ const login = async (req, res) => {
         });
 
         if (!user){
-            return res.status(404).json({
+            return res.status(401).json({
                 success: false,
-                message: "User not found"
+                message: "Wrong email/username or password"
             });
         }
 
@@ -49,7 +48,7 @@ const login = async (req, res) => {
         if (!validPassword){
             return res.status(401).json({
                 success: false,
-                message: "Invalid password"
+                message: "Wrong email/username or password"
             })
         }
 

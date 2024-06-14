@@ -39,7 +39,7 @@ const validateRegister = [
 //definisikan validasi untuk login
 const validateLogin = [
     body('email').notEmpty().withMessage('Email or Username is required'),
-    body('password').isLength({ min: 6 }).withMessage('Password must be at least 6 characters long'),
+    body('password').notEmpty().withMessage('Password is required'),
 ];
 
 module.exports = { validateRegister, validateLogin };
