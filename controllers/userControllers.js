@@ -80,10 +80,7 @@ const createUser = async (req, res) => {
 };
 
 const getUserbyId = async (req, res) => {
-    console.log(`Params ${req}`);
-    console.log(`Params ${req.params}`);
     const { id } = req.params;
-    console.log(`Params ${id}`);
     try {
         // Cari user
         const user = await prisma.user.findFirst({
@@ -133,4 +130,66 @@ const getUserbyId = async (req, res) => {
     }
 };
 
-module.exports = { allUsers, createUser, getUserbyId };
+const updatedataUser = async (req, res) => {
+    const { id } = req.params;
+
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+        return res.status(422).json({
+            success: false,
+            message: "Validation error",
+            errors: errors.array(),
+        });
+    }
+
+    try {
+        // Cari user
+        const user = await prisma.user.findFirst({
+            where: {
+                id: Number(id)
+            },
+            select: {
+                id: true,
+                name: true,
+                username: true,
+                email: true,
+            },
+        });
+
+        if (!user){
+            return res.status(404).json({
+                success: false,
+                message: "User not found"
+            });
+        }
+
+        const hashedPassword = req.body.password ? await bcrypt.hash(req.body.password, 10) : user.password;
+        const updateduser = await prisma.user.update({
+            where: {
+                id: Number(id),
+            },
+            data: {
+                name: req.body.name ? req.body.name : user.name,
+                username: req.body.username ? req.body.username : user.username,
+                email: req.body.email ? req.body.email : user.email,
+                password: hashedPassword,
+            },
+        });
+
+        res.status(200).send({
+            success: true,
+            message: `User by ID ${id} updated successfully`,
+            data: {
+                user: updateduser,
+            }
+        });
+    } catch (error) {
+        res.status(500).send({
+            success: false,
+            message: "Internal server error"
+        });
+    }
+};
+
+module.exports = { allUsers, createUser, getUserbyId, updatedataUser };
