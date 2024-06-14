@@ -16,6 +16,10 @@ import Register from "../views/auth/register.jsx";
 //import view login
 import Login from "../views/auth/login.jsx";
 
+//import view admin dashboard
+import Dashboard from "../views/admin/dashboard/index.jsx";
+import Users from "../views/admin/users/users.jsx";
+
 export default function AppRoutes() {
 
     //destructure context "isAuthenticated"
@@ -34,6 +38,14 @@ export default function AppRoutes() {
             {/* route "/login" */}
             <Route path="/login" element={
                 isAuthenticated ? <Navigate to="/admin/dashboard" replace /> : <Login />
+            } />
+
+            {/* route "/admin/dashboard" */}
+            <Route path="/admin/dashboard" element={
+                isAuthenticated ? <Dashboard /> : <Navigate to="/login" replace />
+            } />
+            <Route path="/admin/users" element={
+                isAuthenticated ? <Users /> : <Navigate to="/login" replace />
             } />
         </Routes>
     );
