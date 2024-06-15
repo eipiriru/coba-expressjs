@@ -9,9 +9,6 @@ const validateUser = [
     body('name').notEmpty().withMessage('Name is required'),
     body('username').notEmpty().withMessage('Username is required.')
         .custom(async (value) => {
-            if (!value){
-                throw new Error('Username is required');
-            }
             // const user = await prisma.user.findUnique({ where: { username: value } });
             const user = await prisma.user.findFirst({ where: { OR: [{username: value},{email: value}] } })
             if (user) {
@@ -23,9 +20,6 @@ const validateUser = [
         .notEmpty().withMessage('Email is required')
         .isEmail().withMessage('Email is invalid')
         .custom(async (value) => {
-            if (!value) {
-                throw new Error('Email is required');
-            }
             // const user = await prisma.user.findUnique({ where: { email: value } });
             const user = await prisma.user.findFirst({ where: { OR: [{username: value},{email: value}] } })
             if (user) {
@@ -40,9 +34,6 @@ const validateUpdateAllData = [
     body('name').notEmpty().withMessage('Name is required'),
     body('username').notEmpty().withMessage('Username is required.')
         .custom(async (value, { req }) => {
-            if (!value){
-                throw new Error('Username is required');
-            }
             // const user = await prisma.user.findUnique({ where: { username: value } });
             const user = await prisma.user.findFirst({ where: { OR: [{username: value},{email: value}] } })
             if (user && user.id !== Number(req.params.id)) {
@@ -54,9 +45,6 @@ const validateUpdateAllData = [
         .notEmpty().withMessage('Email is required')
         .isEmail().withMessage('Email is invalid')
         .custom(async (value, { req }) => {
-            if (!value) {
-                throw new Error('Email is required');
-            }
             // const user = await prisma.user.findUnique({ where: { email: value } });
             const user = await prisma.user.findFirst({ where: { OR: [{username: value},{email: value}] } })
             if (user && user.id !== Number(req.params.id)) {

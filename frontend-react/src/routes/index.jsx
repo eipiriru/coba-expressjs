@@ -19,6 +19,8 @@ import Login from "../views/auth/login.jsx";
 //import view admin dashboard
 import Dashboard from "../views/admin/dashboard/index.jsx";
 import Users from "../views/admin/users/users.jsx";
+import UsersCreate from "../views/admin/users/create.jsx";
+import UsersEdit from "../views/admin/users/edit.jsx";
 
 export default function AppRoutes() {
 
@@ -46,6 +48,12 @@ export default function AppRoutes() {
             } />
             <Route path="/admin/users" element={
                 isAuthenticated ? <Users /> : <Navigate to="/login" replace />
+            } />
+            <Route path="/admin/users/create" element={
+                isAuthenticated ? <UsersCreate /> : <Navigate to="/login" replace />
+            } />
+            <Route path="/admin/users/edit/:id" element={
+                isAuthenticated ? <UsersEdit /> : <Navigate to="/login" replace />
             } />
         </Routes>
     );

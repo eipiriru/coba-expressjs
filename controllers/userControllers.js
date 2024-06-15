@@ -196,7 +196,6 @@ const deleteUserbyId = async (req, res) => {
 
     //get ID from params
     const { id } = req.params;
-    console.log(`Params delete ${req}`);
 
     try {
 

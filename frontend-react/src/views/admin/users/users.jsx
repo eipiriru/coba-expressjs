@@ -42,6 +42,24 @@ export default function UsersIndex() {
 
     }
 
+    const deleteUser = async (id) => {
+        const token = Cookies.get('token');
+
+        if (token) {
+            //set authorization header with token
+            api.defaults.headers.common['Authorization'] = token;
+
+            try {
+                await api.delete(`/api/admin/deleteuserbyid/${id}`);
+                fetchDataUsers();
+            } catch (error) {
+                console.error("There was an error deleting the users!", error);
+            }
+        } else {
+            console.error("Token is not available!");
+        }
+    }
+
     //run hook useEffect
     useEffect(() => {
 
@@ -82,7 +100,7 @@ export default function UsersIndex() {
                                                     <td>{user.email}</td>
                                                     <td className="text-center">
                                                         <Link to={`/admin/users/edit/${user.id}`} className="btn btn-sm btn-primary rounded-sm shadow border-0 me-2">EDIT</Link>
-                                                        <button className="btn btn-sm btn-danger rounded-sm shadow border-0">DELETE</button>
+                                                        <button onClick={() => deleteUser(user.id)} className="btn btn-sm btn-danger rounded-sm shadow border-0">DELETE</button>
                                                     </td>
                                                 </tr>
                                             ))
